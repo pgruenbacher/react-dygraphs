@@ -39,6 +39,7 @@ export default class Dygraph extends React.Component {
             initAttrs.interactionModel || DygraphBase.Interaction.defaultModel;
         initAttrs.interactionModel = this._interactionProxy;
         this._dygraph = new DygraphBase(this.refs.root, this.props.data, initAttrs);
+        // console.log('this._dygraph', this._dygraph);
     }
 
     componentWillUpdate(nextProps/*, nextState*/) {
