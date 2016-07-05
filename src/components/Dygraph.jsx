@@ -49,6 +49,7 @@ export default class Dygraph extends React.Component {
                 updateAttrs.interactionModel || DygraphBase.Interaction.defaultModel;
             updateAttrs.interactionModel = this._interactionProxy;
             this._dygraph.updateOptions(updateAttrs);
+            console.log('updatedActions', updateAttrs);
         }
     }
 
@@ -64,6 +65,7 @@ export default class Dygraph extends React.Component {
     render() {
         return (
             <div
+                id="dygraph-mount"
                 ref='root'
                 style={this.props.style}
             />
