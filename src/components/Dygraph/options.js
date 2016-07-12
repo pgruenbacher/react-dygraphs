@@ -79,6 +79,7 @@ const options = {
     legend: p.oneOf(['onmouseover', 'always', 'follow']),
     logscale: {type: p.boolean},
     maxNumberWidth: {type: p.number},
+    mapSecondaryXAxis: {type: p.func},
     panEdgeFraction: {type: p.number},
     pixelsPerLabel: {type: p.number},
     plotter: {type: p.oneOfType([p.func, p.arrayOf(p.func)])},
