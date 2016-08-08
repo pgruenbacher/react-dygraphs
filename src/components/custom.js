@@ -180,6 +180,65 @@ export function willDrawChart(e) {
     }
   }
 
+
+  if (g.attr_('secondaryXAxisFormatter')) {
+    var secondaryXAxisFormatter = g.attr_('secondaryXAxisFormatter');
+    console.log('s', secondaryXAxisFormatter);
+    if (layout.xticks) {
+      var getAxisOption = makeOptionGetter('x');
+      for (i = 0; i < layout.xticks.length; i++) {
+        tick = layout.xticks[i];
+        tick = secondaryXAxisFormatter(tick);
+        x = area.x + tick[0] * area.w;
+        // y = area.y + area.h;
+        y = area.y - 20;
+
+        /* Tick marks are currently clipped, so don't bother drawing them.
+        context.beginPath();
+        context.moveTo(halfUp(x), halfDown(y));
+        context.lineTo(halfUp(x), halfDown(y + this.attr_('axisTickSize')));
+        context.closePath();
+        context.stroke();
+        */
+
+        label = makeDiv(tick[1], 'x', 'x');
+        label.style.textAlign = 'center';
+        label.style.top = (y + getAxisOption('axisTickSize')) + 'px';
+
+        var left = (x - getAxisOption('axisLabelWidth')/2);
+        if (left + getAxisOption('axisLabelWidth') > canvasWidth) {
+          left = canvasWidth - getAxisOption('axisLabelWidth');
+          label.style.textAlign = 'right';
+        }
+        if (left < 0) {
+          left = 0;
+          label.style.textAlign = 'left';
+        }
+
+        label.style.left = left + 'px';
+        label.style.width = getAxisOption('axisLabelWidth') + 'px';
+        containerDiv.appendChild(label);
+        this.xlabels_.push(label);
+      }
+    }
+
+    context.strokeStyle = g.getOptionForAxis('axisLineColor', 'x');
+    context.lineWidth = g.getOptionForAxis('axisLineWidth', 'x');
+    context.beginPath();
+    var axisY;
+    if (g.getOption('drawAxesAtZero')) {
+      var r = g.toPercentYCoord(0, 0);
+      if (r > 1 || r < 0) r = 1;
+      axisY = halfDown(area.y + r * area.h);
+    } else {
+      axisY = halfDown(area.y + area.h);
+    }
+    context.moveTo(halfUp(area.x), axisY);
+    context.lineTo(halfUp(area.x + area.w), axisY);
+    context.closePath();
+    context.stroke();
+  }
+
   if (g.getOptionForAxis('drawAxis', 'x')) {
     if (g.attributes_.user_.mapSecondaryXAxis) {
       if (layout.xticks) {

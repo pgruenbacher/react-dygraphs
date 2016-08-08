@@ -102,12 +102,19 @@ export default class Dygraph extends React.Component {
 
     componentWillUpdate(nextProps/*, nextState*/) {
         if (this._dygraph) {
-            const {known: updateAttrs} = spreadKnownProps(nextProps, false);
+            let {known: updateAttrs} = spreadKnownProps(nextProps, false);
             this._interactionProxy._target =
                 updateAttrs.interactionModel || DygraphBase.Interaction.defaultModel;
             updateAttrs.interactionModel = this._interactionProxy;
+            // console.log('')
+            if (typeof updateAttrs.file === 'string') {
+
+                if (this.props.data === updateAttrs.file) {
+                    delete updateAttrs.file;
+                    // let {file, ...updateAttrs} = updateAttrs;
+                }
+            }
             this._dygraph.updateOptions(updateAttrs);
-            // console.log('updatedActions', updateAttrs);
         }
     }
 
@@ -118,15 +125,46 @@ export default class Dygraph extends React.Component {
         }
     }
 
+    reloadFile() {
+        let {known: updateAttrs} = spreadKnownProps(this.props, false);
+        this._interactionProxy._target =
+                updateAttrs.interactionModel || DygraphBase.Interaction.defaultModel;
+        updateAttrs.interactionModel = this._interactionProxy;
+        this._dygraph.updateOptions(updateAttrs);
+    }
+
     _interactionProxy = new InteractionModelProxy();
 
     render() {
         return (
             <div
-                id="dygraph-mount"
+                id='dygraph-mount'
                 ref='root'
                 style={this.props.style}
             />
         );
     }
 }
+
+
+// function areEqualShallow(a, b, list = []) {
+//     for(let key in a) {
+//         if(!(key in b) || a[key] !== b[key]) {
+//             if (list.indexOf(key) > -1) {
+//                 continue
+//             }
+//             console.log('!', key)
+//             return false;
+//         }
+//     }
+//     for(let key in b) {
+//         if(!(key in a) || a[key] !== b[key]) {
+//             if (list.indexOf(key) > -1) {
+//                 continue
+//             }
+//             console.log('!', key)
+//             return false;
+//         }
+//     }
+//     return true;
+// }

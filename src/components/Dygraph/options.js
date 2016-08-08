@@ -102,6 +102,7 @@ const options = {
     stackedGraphNaNFill: true,
     stepPlot: {type: p.boolean},
     strokeBorderColor: true,
+    secondaryXAxisFormatter: true,
     strokeBorderWidth: {type: p.number},
     strokePattern: true,
     strokeWidth: {type: p.number},
