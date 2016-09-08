@@ -6,6 +6,7 @@
   "jsnext:main": "src/index.js",
   "scripts": {
     "build": "eslint src && babel -D src -d dist",
+    "build:unsafe": "babel -D src -d dist",
     "test": "karma start karma-ci.conf.js",
     "local-test": "karma start karma.conf.js --single-run",
     "prepublish": "npm run build",

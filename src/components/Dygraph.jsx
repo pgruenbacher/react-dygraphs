@@ -13,6 +13,7 @@ DygraphBase.PLUGINS.forEach(plugin=>{
   }
 })
 
+
 import {
   startZoom,
   drawZoomRect_,
@@ -28,6 +29,14 @@ const oldMoveZoom = DygraphBase.moveZoom;
 const oldDoZoom_ = DygraphBase.prototype.doZoom_;
 const oldEndZoom = DygraphBase.endZoom
 
+DygraphBase.prototype.cascadeDataDidUpdateEvent_ = function() {
+    // TODO(danvk): there are some issues checking xAxisRange() and using
+    // toDomCoords from handlers of this event. The visible range should be set
+    // when the chart is drawn, not derived from the data.
+    // console.log('this.handleDataDidUpdate?', this.handleDataDidUpdate)
+    if (this.handleDataDidUpdate) this.handleDataDidUpdate(this);
+    this.cascadeEvents_('dataDidUpdate', {});
+};
 
 class InteractionModelProxy {
     constructor() {
@@ -61,6 +70,7 @@ export default class Dygraph extends React.Component {
 
     static propTypes = Object.assign({
       style: React.PropTypes.object,
+      onDataUpdate: React.PropTypes.func,
       rectangularZoom: React.PropTypes.bool
     }, dygraphPropTypes);
 
@@ -69,6 +79,7 @@ export default class Dygraph extends React.Component {
 
     constructor(props) {
         super(props);
+        this._handleDataDidUpdate = this._handleDataDidUpdate.bind(this);
     }
 
     componentDidMount() {
@@ -76,8 +87,10 @@ export default class Dygraph extends React.Component {
         this._interactionProxy._target =
             initAttrs.interactionModel || DygraphBase.Interaction.defaultModel;
         initAttrs.interactionModel = this._interactionProxy;
+
         this._dygraph = new DygraphBase(this.refs.root, this.props.data, initAttrs);
         // console.log('this._dygraph', this._dygraph);
+        this._dygraph.handleDataDidUpdate = this._handleDataDidUpdate;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -122,6 +135,12 @@ export default class Dygraph extends React.Component {
         if (this._dygraph) {
             this._dygraph.destroy();
             this._dygraph = null;
+        }
+    }
+
+    _handleDataDidUpdate(dygraph) {
+        if (this.props.onDataUpdate) {
+            this.props.onDataUpdate(dygraph)
         }
     }
 
