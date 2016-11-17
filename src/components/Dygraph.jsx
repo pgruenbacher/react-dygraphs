@@ -1,7 +1,7 @@
 import React from 'react';
 import DygraphBase from 'dygraphs-commonjs';
 import {propTypes as dygraphPropTypes, spreadProps as spreadKnownProps} from './Dygraph/options';
-
+import {scrollV3 as scrollZoom} from './scrollZoom';
 
 import {willDrawChart} from './custom';
 // console.log('PLUGINS', DygraphBase.PLUGINS);
@@ -47,6 +47,11 @@ class InteractionModelProxy {
                 return thisProxy._target[method].call(calledContext, ...args);
             };
         }
+
+        this['mousewheel'] = function (...args) {
+            return scrollZoom(...args);
+        };
+
         ['willDestroyContextMyself'].forEach(prop => {
             Object.defineProperty(this, prop, {
                 configurable: false,
