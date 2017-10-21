@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DygraphBase from 'dygraphs-commonjs';
 import {propTypes as dygraphPropTypes, spreadProps as spreadKnownProps} from './Dygraph/options';
 import {scrollV3 as scrollZoom} from './scrollZoom';
@@ -74,9 +75,9 @@ class InteractionModelProxy {
 export default class Dygraph extends React.Component {
 
     static propTypes = Object.assign({
-      style: React.PropTypes.object,
-      onDataUpdate: React.PropTypes.func,
-      rectangularZoom: React.PropTypes.bool
+      style: PropTypes.object,
+      onDataUpdate: PropTypes.func,
+      rectangularZoom: PropTypes.bool
     }, dygraphPropTypes);
 
     static displayName = 'Dygraph';
