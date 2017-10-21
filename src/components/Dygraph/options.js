@@ -1,4 +1,4 @@
-import {PropTypes as p} from 'react';
+import p from 'prop-types';
 
 const options = {
     animatedZooms: {type: p.boolean},
